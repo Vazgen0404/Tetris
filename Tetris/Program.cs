@@ -9,13 +9,23 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
-            ShowMenu();
-            if (Console.ReadKey().Key == ConsoleKey.Enter)
+            switch (ShowMenu())
             {
-                StartGame();
-                Console.Clear();
-            } 
-
+                case "Start Game":
+                    StartGame();
+                    break;
+                case "Best Results":
+                    
+                    break;
+                case "Exit":
+                    Console.Clear();
+                    Environment.Exit(0);
+                    break;
+                default:
+                    break;
+            }
+            
+           
         }
 
         private static void StartGame()
@@ -173,6 +183,7 @@ namespace Tetris
 
         private static void PrintField()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(15,9);
             Console.WriteLine('╔');
             Console.SetCursorPosition(16,9);
@@ -199,7 +210,7 @@ namespace Tetris
             }
         }
 
-        private static void ShowMenu()
+        private static string ShowMenu()
         {
             CreateWindow();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -222,10 +233,107 @@ namespace Tetris
             Console.SetCursorPosition(0, 19);
             Console.WriteLine("         O     OOOOOO     O     O    O  OOOOO   OOOOO");
 
-            string text = "Press Enter To Start";
+
+            string cursor = "Start Game";
+
+
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            string text = "Start Game";
             Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, 25);
             Console.WriteLine(text);
-            
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            text = "Best Results";
+            Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, 26);
+            Console.WriteLine(text);
+
+            text = "Exit";
+            Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, 27);
+            Console.WriteLine(text);
+
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    switch (Console.ReadKey().Key)
+                    {
+                        case ConsoleKey.DownArrow:
+                            switch (cursor)
+                            {
+                                case "Start Game":
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.SetCursorPosition((Console.WindowWidth - 10) / 2, 25);
+                                    Console.WriteLine("Start Game");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition((Console.WindowWidth - 12) / 2, 26);
+                                    Console.WriteLine("Best Results");
+                                    cursor = "Best Results";
+                                    break;
+                                case "Best Results":
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.SetCursorPosition((Console.WindowWidth - 12) / 2, 26);
+                                    Console.WriteLine("Best Results");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition((Console.WindowWidth - 4) / 2, 27);
+                                    Console.WriteLine("Exit");
+                                    cursor = "Exit";
+                                    break;
+                                case "Exit":
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.SetCursorPosition((Console.WindowWidth - 4) / 2, 27);
+                                    Console.WriteLine("Exit");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition((Console.WindowWidth - 10) / 2, 25);
+                                    Console.WriteLine("Start Game");
+                                    cursor = "Start Game";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case ConsoleKey.UpArrow:
+                            switch (cursor)
+                            {
+                                case "Start Game":
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.SetCursorPosition((Console.WindowWidth - 10) / 2, 25);
+                                    Console.WriteLine("Start Game");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition((Console.WindowWidth - 4) / 2, 27);
+                                    Console.WriteLine("Exit");
+                                    cursor = "Exit";
+                                    break;
+                                case "Best Results":
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.SetCursorPosition((Console.WindowWidth - 12) / 2, 26);
+                                    Console.WriteLine("Best Results");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition((Console.WindowWidth - 10) / 2, 25);
+                                    Console.WriteLine("Start Game");
+                                    cursor = "Start Game";
+                                    break;
+                                case "Exit":
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.SetCursorPosition((Console.WindowWidth - 4) / 2, 27);
+                                    Console.WriteLine("Exit");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition((Console.WindowWidth - 12) / 2, 26);
+                                    Console.WriteLine("Best Results");
+                                    cursor = "Best Results";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case ConsoleKey.Enter:
+                            Console.ResetColor();
+                            return cursor;
+                    }
+                }
+            }
+
         }
 
         private static void CreateWindow()

@@ -12,18 +12,25 @@ namespace Tetris
 
         public void Print()
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (Coordinates coordinate in coordinates)
             {
-                Console.SetCursorPosition(coordinate.left, coordinate.top);
-                Console.WriteLine("■");
+                if (coordinate.top > 9)
+                {
+                    Console.SetCursorPosition(coordinate.left, coordinate.top);
+                    Console.WriteLine("■");
+                }              
             }
         }
         public void Clear()
         {
             foreach (Coordinates coordinate in coordinates)
             {
-                Console.SetCursorPosition(coordinate.left, coordinate.top);
-                Console.WriteLine(" ");
+                if (coordinate.top > 9)
+                {
+                    Console.SetCursorPosition(coordinate.left, coordinate.top);
+                    Console.WriteLine(" ");
+                }               
             }
         }
 

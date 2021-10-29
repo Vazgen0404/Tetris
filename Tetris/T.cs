@@ -10,22 +10,22 @@ namespace Tetris
         {
             coordinates = new Coordinates[16]
           {
+                new Coordinates { left = 30, top = 7 },
+                new Coordinates { left = 31, top = 7 },
+                new Coordinates { left = 30, top = 8 },
+                new Coordinates { left = 31, top = 8 },
+                new Coordinates { left = 28, top = 9 },
+                new Coordinates { left = 29, top = 9 },
+                new Coordinates { left = 30, top = 9 },
+                new Coordinates { left = 31, top = 9 },
+                new Coordinates { left = 32, top = 9 },
+                new Coordinates { left = 33, top = 9 },
+                new Coordinates { left = 28, top = 10 },
+                new Coordinates { left = 29, top = 10 },
                 new Coordinates { left = 30, top = 10 },
                 new Coordinates { left = 31, top = 10 },
-                new Coordinates { left = 30, top = 11 },
-                new Coordinates { left = 31, top = 11 },
-                new Coordinates { left = 28, top = 12 },
-                new Coordinates { left = 29, top = 12 },
-                new Coordinates { left = 30, top = 12 },
-                new Coordinates { left = 31, top = 12 },
-                new Coordinates { left = 32, top = 12 },
-                new Coordinates { left = 33, top = 12 },
-                new Coordinates { left = 28, top = 13 },
-                new Coordinates { left = 29, top = 13 },
-                new Coordinates { left = 30, top = 13 },
-                new Coordinates { left = 31, top = 13 },
-                new Coordinates { left = 32, top = 13 },
-                new Coordinates { left = 33, top = 13 }
+                new Coordinates { left = 32, top = 10 },
+                new Coordinates { left = 33, top = 10 }
           };
         }
         public override void ChangeStructure()
