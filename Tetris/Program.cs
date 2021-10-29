@@ -15,7 +15,7 @@ namespace Tetris
                     StartGame();
                     break;
                 case "Best Results":
-                    
+
                     break;
                 case "Exit":
                     Console.Clear();
@@ -24,8 +24,8 @@ namespace Tetris
                 default:
                     break;
             }
-            
-           
+
+
         }
 
         private static void StartGame()
@@ -36,6 +36,10 @@ namespace Tetris
             AddBusyFields(busyFields);
             List<Coordinates> topRow = new List<Coordinates>();
             AddTopRow(topRow);
+            List<Coordinates> leftRow = new List<Coordinates>();
+            AddLeftRow(leftRow);
+            List<Coordinates> rigtRow = new List<Coordinates>();
+            AddRightRow(rigtRow);
 
             PrintField();
             PrintInstruction();
@@ -46,17 +50,23 @@ namespace Tetris
                 Body body = RandomBody();
                 body.Print();
                 Thread.Sleep(1000);
-                while (!IsTheEndOfTheMovement(body,busyFields))
+                while (!IsTheEndOfTheMovement(body, busyFields))
                 {
                     if (Console.KeyAvailable)
                     {
                         switch (Console.ReadKey().Key)
                         {
                             case ConsoleKey.LeftArrow:
-                                body.Move("Left");
+                                if (!IsLeftBorder(body, leftRow))
+                                {
+                                    body.Move("Left");
+                                }
                                 break;
                             case ConsoleKey.RightArrow:
-                                body.Move("Right");
+                                if (!IsRightBorder(body, rigtRow))
+                                {
+                                    body.Move("Right");
+                                }
                                 break;
                             case ConsoleKey.DownArrow:
                                 body.Move("Down");
@@ -67,7 +77,7 @@ namespace Tetris
                                 body.Print();
                                 break;
                             case ConsoleKey.Spacebar:
-                                while (!IsTheEndOfTheMovement(body,busyFields))
+                                while (!IsTheEndOfTheMovement(body, busyFields))
                                 {
                                     body.Move("Down");
                                 }
@@ -85,6 +95,52 @@ namespace Tetris
                 IsGameOver = CheckFinish(topRow, body);
             }
 
+        }
+
+        private static bool IsRightBorder(Body body, List<Coordinates> rigtRow)
+        {
+            foreach (Coordinates item1 in body.coordinates)
+            {
+                foreach (Coordinates item2 in rigtRow)
+                {
+                    if ((item1 + "right") == item2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static bool IsLeftBorder(Body body, List<Coordinates> leftRow)
+        {
+            foreach (Coordinates item1 in body.coordinates)
+            {
+                foreach (Coordinates item2 in leftRow)
+                {
+                    if ((item1 + "left") == item2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static void AddRightRow(List<Coordinates> rigtRow)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                rigtRow.Add(new Coordinates { left = 46, top = 10 + i });
+            }
+        }
+
+        private static void AddLeftRow(List<Coordinates> leftRow)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                leftRow.Add(new Coordinates { left = 15, top = 10 + i });
+            }
         }
 
         private static bool CheckFinish(List<Coordinates> topRow, Body body)
@@ -116,7 +172,7 @@ namespace Tetris
             {
                 foreach (Coordinates item2 in busyFields)
                 {
-                    if ((item1 + 1) == item2)
+                    if ((item1 + "down") == item2)
                     {
                         foreach (Coordinates item in body.coordinates)
                         {
@@ -184,28 +240,28 @@ namespace Tetris
         private static void PrintField()
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(15,9);
+            Console.SetCursorPosition(15, 9);
             Console.WriteLine('╔');
-            Console.SetCursorPosition(16,9);
-            Console.WriteLine(new string('═',30));
-            Console.SetCursorPosition(46,9);
+            Console.SetCursorPosition(16, 9);
+            Console.WriteLine(new string('═', 30));
+            Console.SetCursorPosition(46, 9);
             Console.WriteLine('╗');
-            Console.SetCursorPosition(15,40);
+            Console.SetCursorPosition(15, 40);
             Console.WriteLine('╚');
-            Console.SetCursorPosition(16,40);
-            Console.WriteLine(new string('═',30));
-            Console.SetCursorPosition(46,40);
+            Console.SetCursorPosition(16, 40);
+            Console.WriteLine(new string('═', 30));
+            Console.SetCursorPosition(46, 40);
             Console.WriteLine('╝');
 
             for (int i = 0; i < 30; i++)
             {
-                Console.SetCursorPosition(15,10 + i);
+                Console.SetCursorPosition(15, 10 + i);
                 Console.WriteLine('║');
             }
 
             for (int i = 0; i < 30; i++)
             {
-                Console.SetCursorPosition(46,10+ i);
+                Console.SetCursorPosition(46, 10 + i);
                 Console.WriteLine('║');
             }
         }
@@ -215,9 +271,9 @@ namespace Tetris
             CreateWindow();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition((Console.WindowWidth - 40) / 2, 2);
-            Console.WriteLine(new string('=',40));
+            Console.WriteLine(new string('=', 40));
             Console.SetCursorPosition((Console.WindowWidth - 40) / 2, 3);
-            Console.WriteLine(new string('=',40));
+            Console.WriteLine(new string('=', 40));
             Console.SetCursorPosition((Console.WindowWidth - 40) / 2, Console.WindowHeight - 4);
             Console.WriteLine(new string('=', 40));
             Console.SetCursorPosition((Console.WindowWidth - 40) / 2, Console.WindowHeight - 3);
@@ -341,7 +397,7 @@ namespace Tetris
             Console.SetWindowSize(60, 50);
             Console.SetBufferSize(60, 50);
             Console.CursorVisible = false;
-            
+
         }
     }
 }

@@ -33,9 +33,20 @@ namespace Tetris
             }
         }
 
-        public static Coordinates operator +(Coordinates coordinates,int num)
+        public static Coordinates operator +(Coordinates coordinates,string direction)
         {
-            return new Coordinates { left = coordinates.left, top = coordinates.top + num };
+            switch (direction)
+            {
+                case "down":
+                    return new Coordinates { left = coordinates.left, top = coordinates.top + 1 };
+                case "left":
+                    return new Coordinates { left = coordinates.left - 1, top = coordinates.top };
+                case "right":
+                    return new Coordinates { left = coordinates.left + 1, top = coordinates.top };
+                default:
+                    throw new Exception();
+            }
+            
         }
 
     }
