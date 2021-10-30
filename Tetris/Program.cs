@@ -40,6 +40,8 @@ namespace Tetris
             AddLeftRow(leftRow);
             List<Coordinates> rigtRow = new List<Coordinates>();
             AddRightRow(rigtRow);
+            List<List<Coordinates>> allLines = new List<List<Coordinates>>();
+            AddAllLines(allLines);
 
             PrintField();
             PrintInstruction();
@@ -49,7 +51,7 @@ namespace Tetris
             {
                 Body body = RandomBody();
                 body.Print();
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 while (!IsTheEndOfTheMovement(body, busyFields))
                 {
                     if (Console.KeyAvailable)
@@ -72,9 +74,12 @@ namespace Tetris
                                 body.Move("Down");
                                 break;
                             case ConsoleKey.UpArrow:
-                                body.Clear();
-                                body.ChangeStructure();
-                                body.Print();
+                                if (IsPossibleRotate(body, busyFields, leftRow, rigtRow))
+                                {
+                                    body.Clear();
+                                    body.Rotate();
+                                    body.Print();
+                                }
                                 break;
                             case ConsoleKey.Spacebar:
                                 while (!IsTheEndOfTheMovement(body, busyFields))
@@ -89,12 +94,95 @@ namespace Tetris
                     else
                     {
                         body.Move("Down");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(500);
                     }
                 }
+                CheckLineClearance(allLines,busyFields);
                 IsGameOver = CheckFinish(topRow, body);
+
             }
 
+        }
+
+        private static void CheckLineClearance(List<List<Coordinates>> allLines, List<Coordinates> busyFields)
+        {
+            foreach (var row in allLines)
+            {
+                bool rowIsCompleted = true;
+                foreach (var column in row)
+                {
+                    bool columnIsCompleted = false;
+                    foreach (var busy in busyFields)
+                    {
+                        if (column == busy)
+                        {
+                            columnIsCompleted = true;
+                        }
+                    }
+                    if (!columnIsCompleted)
+                    {
+                        rowIsCompleted = false;
+                        break;
+                    }
+                }
+                if (rowIsCompleted)
+                {
+
+                }
+            }
+        }
+
+        private static void AddAllLines(List<List<Coordinates>> allLines)
+        {
+            for (int i = 10; i <= 39; i++)
+            {
+                List<Coordinates> temp = new List<Coordinates>();
+                for (int j = 16; j <= 45; j++)
+                {
+                    temp.Add(new Coordinates { left = j, top = i });
+                }
+                allLines.Add(temp);
+            }
+        }
+
+        private static bool IsPossibleRotate(Body body, List<Coordinates> busyFields, List<Coordinates> leftRow, List<Coordinates> rigtRow)
+        {
+            Body temp = body.Clone();
+            temp.Rotate();
+            foreach (Coordinates item1 in temp.coordinates)
+            {
+                foreach (Coordinates item2 in busyFields)
+                {
+                    if (item1 == item2)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            foreach (Coordinates item1 in temp.coordinates)
+            {
+                foreach (Coordinates item2 in leftRow)
+                {
+                    if (item1 == item2)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            foreach (Coordinates item1 in temp.coordinates)
+            {
+                foreach (Coordinates item2 in rigtRow)
+                {
+                    if (item1 == item2)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private static bool IsRightBorder(Body body, List<Coordinates> rigtRow)

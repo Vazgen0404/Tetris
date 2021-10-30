@@ -20,7 +20,7 @@ namespace Tetris
                 new Coordinates { left = 34, top = 10 }
             };
         }
-        public override void ChangeStructure()
+        public override void Rotate()
         {
             if (direction == 1)
             {
@@ -58,7 +58,28 @@ namespace Tetris
                 coordinates[7].top = coordinates[3].top;
                 direction = 1;
             }
-            
+
         }
+
+
+        public override Body Clone()
+        {
+            Line ob = (Line)this.MemberwiseClone();
+            Coordinates[] tempCoordinates =
+            {
+                new Coordinates{left = ob.coordinates[0].left,top = ob.coordinates[0].top},
+                new Coordinates{left = ob.coordinates[1].left,top = ob.coordinates[1].top},
+                new Coordinates{left = ob.coordinates[2].left,top = ob.coordinates[2].top},
+                new Coordinates{left = ob.coordinates[3].left,top = ob.coordinates[3].top},
+                new Coordinates{left = ob.coordinates[4].left,top = ob.coordinates[4].top},
+                new Coordinates{left = ob.coordinates[5].left,top = ob.coordinates[5].top},
+                new Coordinates{left = ob.coordinates[6].left,top = ob.coordinates[6].top},
+                new Coordinates{left = ob.coordinates[7].left,top = ob.coordinates[7].top},
+            };
+
+            ob.coordinates = tempCoordinates;
+            return ob;
+        }
+
     }
 }

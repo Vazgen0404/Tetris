@@ -67,7 +67,9 @@ namespace Tetris
 
       
 
-        public abstract void ChangeStructure();
- 
+        public abstract void Rotate();
+
+        public abstract Body Clone();
+        
     }
 }

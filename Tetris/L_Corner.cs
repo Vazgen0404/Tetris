@@ -29,7 +29,7 @@ namespace Tetris
            };
         }
 
-        public override void ChangeStructure()
+        public override void Rotate()
         {
             switch (direction)
             {
@@ -128,6 +128,33 @@ namespace Tetris
                 default:
                     break;
             }
+        }
+
+        public override Body Clone()
+        {
+            L_Corner ob = (L_Corner)this.MemberwiseClone();
+            Coordinates[] tempCoordinates =
+            {
+                new Coordinates{left = ob.coordinates[0].left,top = ob.coordinates[0].top},
+                new Coordinates{left = ob.coordinates[1].left,top = ob.coordinates[1].top},
+                new Coordinates{left = ob.coordinates[2].left,top = ob.coordinates[2].top},
+                new Coordinates{left = ob.coordinates[3].left,top = ob.coordinates[3].top},
+                new Coordinates{left = ob.coordinates[4].left,top = ob.coordinates[4].top},
+                new Coordinates{left = ob.coordinates[5].left,top = ob.coordinates[5].top},
+                new Coordinates{left = ob.coordinates[6].left,top = ob.coordinates[6].top},
+                new Coordinates{left = ob.coordinates[7].left,top = ob.coordinates[7].top},
+                new Coordinates{left = ob.coordinates[8].left,top = ob.coordinates[8].top},
+                new Coordinates{left = ob.coordinates[9].left,top = ob.coordinates[9].top},
+                new Coordinates{left = ob.coordinates[10].left,top = ob.coordinates[10].top},
+                new Coordinates{left = ob.coordinates[11].left,top = ob.coordinates[11].top},
+                new Coordinates{left = ob.coordinates[12].left,top = ob.coordinates[12].top},
+                new Coordinates{left = ob.coordinates[13].left,top = ob.coordinates[13].top},
+                new Coordinates{left = ob.coordinates[14].left,top = ob.coordinates[14].top},
+                new Coordinates{left = ob.coordinates[15].left,top = ob.coordinates[15].top}
+            };
+
+            ob.coordinates = tempCoordinates;
+            return ob;
         }
     }
 }
