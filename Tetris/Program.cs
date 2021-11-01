@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -32,8 +33,8 @@ namespace Tetris
         {
             Console.Clear();
 
-            List<Coordinates> busyFields = new List<Coordinates>();
-            AddBusyFields(busyFields);
+            List<Coordinates> downRow = new List<Coordinates>();
+            AddDownRow(downRow);
             List<Coordinates> topRow = new List<Coordinates>();
             AddTopRow(topRow);
             List<Coordinates> leftRow = new List<Coordinates>();
@@ -42,6 +43,7 @@ namespace Tetris
             AddRightRow(rigtRow);
             List<List<Coordinates>> allLines = new List<List<Coordinates>>();
             AddAllLines(allLines);
+            List<Coordinates> busyFields = new List<Coordinates>();
 
             PrintField();
             PrintInstruction();
@@ -49,10 +51,11 @@ namespace Tetris
             bool IsGameOver = false;
             while (!IsGameOver)
             {
-                Body body = RandomBody();
+                // Body body = RandomBody();
+                Body body = new Line();
                 body.Print();
                 Thread.Sleep(500);
-                while (!IsTheEndOfTheMovement(body, busyFields))
+                while (!IsTheEndOfTheMovement(body, busyFields, downRow, true))
                 {
                     if (Console.KeyAvailable)
                     {
@@ -82,7 +85,7 @@ namespace Tetris
                                 }
                                 break;
                             case ConsoleKey.Spacebar:
-                                while (!IsTheEndOfTheMovement(body, busyFields))
+                                while (!IsTheEndOfTheMovement(body, busyFields, downRow, false))
                                 {
                                     body.Move("Down");
                                 }
@@ -97,7 +100,7 @@ namespace Tetris
                         Thread.Sleep(500);
                     }
                 }
-                CheckLineClearance(allLines,busyFields);
+                CheckLineClearance(allLines, busyFields);
                 IsGameOver = CheckFinish(topRow, body);
 
             }
@@ -106,6 +109,9 @@ namespace Tetris
 
         private static void CheckLineClearance(List<List<Coordinates>> allLines, List<Coordinates> busyFields)
         {
+            List<Coordinates> deletableFields = new List<Coordinates>();
+            int count = 0;
+            int rowsNumber = 0;
             foreach (var row in allLines)
             {
                 bool rowIsCompleted = true;
@@ -127,8 +133,63 @@ namespace Tetris
                 }
                 if (rowIsCompleted)
                 {
+                    rowsNumber = row[0].top;
+                    count++;
 
+                    foreach (var item in row)
+                    {
+                        deletableFields.Add(item);
+                    }
                 }
+            }
+            if (count > 0)
+            {
+                ClearAndRemoveRow(deletableFields, busyFields);
+                ToLowerTops(busyFields, rowsNumber, count);
+            }
+
+        }
+
+        private static void ToLowerTops(List<Coordinates> busyFields, int rowsNumber, int count)
+        {
+            ClearAllTopFields(busyFields, rowsNumber, count);
+            PrintAllTopFields(busyFields, rowsNumber);
+
+        }
+
+        private static void PrintAllTopFields(List<Coordinates> busyFields, int top)
+        {
+            foreach (var item in busyFields)
+            {
+                if (item.top <= top)
+                {
+
+                    Console.SetCursorPosition(item.left, item.top);
+                    Console.WriteLine("■");
+                }
+            }
+        }
+
+        private static void ClearAllTopFields(List<Coordinates> busyFields, int top, int count)
+        {
+            foreach (var item in busyFields)
+            {
+                if (item.top < top)
+                {
+                    Console.SetCursorPosition(item.left, item.top);
+                    Console.WriteLine(" ");
+                    item.top += count;
+                }
+            }
+        }
+
+        private static void ClearAndRemoveRow(List<Coordinates> deletableFields, List<Coordinates> busyFields)
+        {
+            foreach (var column in deletableFields)
+            {
+                Console.SetCursorPosition(column.left, column.top);
+                Console.WriteLine(" ");
+                busyFields.Remove(busyFields.FirstOrDefault(field => field == column));
             }
         }
 
@@ -254,7 +315,7 @@ namespace Tetris
             }
         }
 
-        private static bool IsTheEndOfTheMovement(Body body, List<Coordinates> busyFields)
+        private static bool IsTheEndOfTheMovement(Body body, List<Coordinates> busyFields, List<Coordinates> downRow, bool endMovement)
         {
             foreach (Coordinates item1 in body.coordinates)
             {
@@ -262,9 +323,30 @@ namespace Tetris
                 {
                     if ((item1 + "down") == item2)
                     {
-                        foreach (Coordinates item in body.coordinates)
+                        if (endMovement)
                         {
-                            busyFields.Add(item);
+                            foreach (Coordinates item in body.coordinates)
+                            {
+                                busyFields.Add(item);
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+            foreach (Coordinates item1 in body.coordinates)
+            {
+                foreach (Coordinates item2 in downRow)
+                {
+                    if ((item1 + "down") == item2)
+                    {
+                        if (endMovement)
+                        {
+                            foreach (Coordinates item in body.coordinates)
+                            {
+                                busyFields.Add(item);
+                            }
                         }
                         return true;
                     }
@@ -273,11 +355,11 @@ namespace Tetris
             return false;
         }
 
-        private static void AddBusyFields(List<Coordinates> busyFields)
+        private static void AddDownRow(List<Coordinates> downRow)
         {
             for (int i = 16; i < 46; i++)
             {
-                busyFields.Add(new Coordinates { left = i, top = 40 });
+                downRow.Add(new Coordinates { left = i, top = 40 });
             }
         }
 
