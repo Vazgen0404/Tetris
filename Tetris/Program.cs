@@ -49,10 +49,10 @@ namespace Tetris
             PrintInstruction();
 
             bool IsGameOver = false;
+
             while (!IsGameOver)
             {
-                // Body body = RandomBody();
-                Body body = new Line();
+                Body body = RandomBody();
                 body.Print();
                 Thread.Sleep(500);
                 while (!IsTheEndOfTheMovement(body, busyFields, downRow, true))
@@ -62,13 +62,13 @@ namespace Tetris
                         switch (Console.ReadKey().Key)
                         {
                             case ConsoleKey.LeftArrow:
-                                if (!IsLeftBorder(body, leftRow))
+                                if (!IsLeftBorder(body, leftRow) && !IsLeftFieldBusy(body,busyFields))
                                 {
                                     body.Move("Left");
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
-                                if (!IsRightBorder(body, rigtRow))
+                                if (!IsRightBorder(body, rigtRow) && !IsRightFieldBusy(body,busyFields))
                                 {
                                     body.Move("Right");
                                 }
@@ -105,6 +105,36 @@ namespace Tetris
 
             }
 
+        }
+
+        private static bool IsRightFieldBusy(Body body, List<Coordinates> busyFields)
+        {
+            foreach (Coordinates item1 in body.coordinates)
+            {
+                foreach (Coordinates item2 in busyFields)
+                {
+                    if ((item1 + "right") == item2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static bool IsLeftFieldBusy(Body body, List<Coordinates> busyFields)
+        {
+            foreach (var item1 in body.coordinates)
+            {
+                foreach (var item2 in busyFields)
+                {
+                    if ((item1 + "left") == item2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private static void CheckLineClearance(List<List<Coordinates>> allLines, List<Coordinates> busyFields)
