@@ -22,7 +22,8 @@ namespace Tetris
                     StartGame();
                     break;
                 case "Best Results":
-
+                    Result.Print();
+                    Game();
                     break;
                 case "Exit":
                     Console.Clear();
@@ -120,7 +121,7 @@ namespace Tetris
 
             result.time = DateTime.Now.Subtract(startTime).ToString();
 
-            result.Save();
+            Result.Save(result);
             GameOver(result);
         }
 
@@ -522,6 +523,12 @@ namespace Tetris
             Console.WriteLine("                  Press Enter to return Menu");
 
 
+            if (IsHighScore(result))
+            {
+                Console.SetCursorPosition(0, 33);
+                Console.WriteLine($"                      New High Score!!!");
+            }
+
             while (true)
             {
                 if (Console.KeyAvailable)
@@ -534,6 +541,21 @@ namespace Tetris
                 }
             }
         }
+
+        private static bool IsHighScore(Result result)
+        {
+            List<Result> results = Result.ReadFromFile(@"D:\Results.txt");
+
+            if (result.score == results[0].score)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private static string ShowMenu()
         {
             CreateWindow();
