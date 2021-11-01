@@ -10,6 +10,12 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
+            Game();
+        }
+
+        private static void Game()
+        {
+            
             switch (ShowMenu())
             {
                 case "Start Game":
@@ -25,8 +31,6 @@ namespace Tetris
                 default:
                     break;
             }
-
-
         }
 
         private static void StartGame()
@@ -48,13 +52,19 @@ namespace Tetris
             PrintField();
             PrintInstruction();
 
+            DateTime startTime = DateTime.Now;
+            Result result = new Result();
+
             bool IsGameOver = false;
 
             while (!IsGameOver)
             {
                 Body body = RandomBody();
                 body.Print();
-                Thread.Sleep(500);
+                result.Show();
+
+                Thread.Sleep(500 / result.level);
+
                 while (!IsTheEndOfTheMovement(body, busyFields, downRow, true))
                 {
                     if (Console.KeyAvailable)
@@ -75,6 +85,7 @@ namespace Tetris
                                 break;
                             case ConsoleKey.DownArrow:
                                 body.Move("Down");
+                                result.AddScore(1);
                                 break;
                             case ConsoleKey.UpArrow:
                                 if (IsPossibleRotate(body, busyFields, leftRow, rigtRow))
@@ -88,6 +99,7 @@ namespace Tetris
                                 while (!IsTheEndOfTheMovement(body, busyFields, downRow, false))
                                 {
                                     body.Move("Down");
+                                    result.AddScore(2);
                                 }
                                 break;
                             default:
@@ -95,16 +107,21 @@ namespace Tetris
                         }
                     }
                     else
-                    {
+                    { 
                         body.Move("Down");
                         Thread.Sleep(500);
                     }
+
                 }
-                CheckLineClearance(allLines, busyFields);
+                CheckLineClearance(allLines, busyFields,result);
                 IsGameOver = CheckFinish(topRow, body);
 
             }
 
+            result.time = DateTime.Now.Subtract(startTime).ToString();
+
+            result.Save();
+            GameOver(result);
         }
 
         private static bool IsRightFieldBusy(Body body, List<Coordinates> busyFields)
@@ -115,7 +132,7 @@ namespace Tetris
                 {
                     if ((item1 + "right") == item2)
                     {
-                        return true;
+                        return true; 
                     }
                 }
             }
@@ -137,7 +154,7 @@ namespace Tetris
             return false;
         }
 
-        private static void CheckLineClearance(List<List<Coordinates>> allLines, List<Coordinates> busyFields)
+        private static void CheckLineClearance(List<List<Coordinates>> allLines, List<Coordinates> busyFields, Result result)
         {
             List<Coordinates> deletableFields = new List<Coordinates>();
             int count = 0;
@@ -176,6 +193,7 @@ namespace Tetris
             {
                 ClearAndRemoveRow(deletableFields, busyFields);
                 ToLowerTops(busyFields, rowsNumber, count);
+                result.LineControls(count);
             }
 
         }
@@ -193,7 +211,7 @@ namespace Tetris
             {
                 if (item.top <= top)
                 {
-
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.SetCursorPosition(item.left, item.top);
                     Console.WriteLine("■");
                 }
@@ -465,7 +483,57 @@ namespace Tetris
                 Console.WriteLine('║');
             }
         }
+        private static void GameOver(Result result)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition((Console.WindowWidth - 40) / 2, 2);
+            Console.WriteLine(new string('=', 40));
+            Console.SetCursorPosition((Console.WindowWidth - 40) / 2, 3);
+            Console.WriteLine(new string('=', 40));
+            Console.SetCursorPosition((Console.WindowWidth - 40) / 2, Console.WindowHeight - 4);
+            Console.WriteLine(new string('=', 40));
+            Console.SetCursorPosition((Console.WindowWidth - 40) / 2, Console.WindowHeight - 3);
+            Console.WriteLine(new string('=', 40));
+            Console.SetCursorPosition(0, 10);
+            Console.WriteLine("                  O     O   OOOOO   O     O");
+            Console.SetCursorPosition(0, 11);
+            Console.WriteLine("                   O   O   O     O  O     O");
+            Console.SetCursorPosition(0, 12);
+            Console.WriteLine("                    O O    O     O  O     O");
+            Console.SetCursorPosition(0, 13);
+            Console.WriteLine("                     O     O     O  O     O");
+            Console.SetCursorPosition(0, 14);
+            Console.WriteLine("                     O      OOOOO    OOOOO  ");
+            Console.SetCursorPosition(0, 18);
+            Console.WriteLine("               O       OOOOO    OOOOO   OOOOOO");
+            Console.SetCursorPosition(0, 19);
+            Console.WriteLine("               O      O     O  O        O");
+            Console.SetCursorPosition(0, 20);
+            Console.WriteLine("               O      O     O   OOOOO   OOOOOO");
+            Console.SetCursorPosition(0, 21);
+            Console.WriteLine("               O      O     O        O  O");
+            Console.SetCursorPosition(0, 22);
+            Console.WriteLine("               OOOOO   OOOOO    OOOOO   OOOOOO");
 
+            Console.SetCursorPosition(0, 35);
+            Console.WriteLine($"                       Your Score: {result.score}");
+            Console.SetCursorPosition(0, 40);
+            Console.WriteLine("                  Press Enter to return Menu");
+
+
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    if (Console.ReadKey().Key == ConsoleKey.Enter)
+                    {
+                        Console.Clear();
+                        Game();
+                    }
+                }
+            }
+        }
         private static string ShowMenu()
         {
             CreateWindow();
