@@ -8,11 +8,12 @@ namespace Tetris
     {
         public Coordinates[] coordinates;
         protected int direction = 1;
+        public ConsoleColor color;
 
 
         public void Print()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = color;
             foreach (Coordinates coordinate in coordinates)
             {
                 if (coordinate.top > 9)

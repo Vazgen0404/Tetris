@@ -27,6 +27,7 @@ namespace Tetris
                 new Coordinates { left = 32, top = 10 },
                 new Coordinates { left = 33, top = 10 }
           };
+            color = ConsoleColor.Cyan;
         }
         public override void Rotate()
         {

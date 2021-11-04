@@ -8,7 +8,7 @@ namespace Tetris
     {
         public int left { get; set; }
         public int top { get; set; }
-
+        public ConsoleColor color { get; set; }
 
         public static bool operator ==(Coordinates coordinate1, Coordinates coordinate2)
         {

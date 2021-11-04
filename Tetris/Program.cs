@@ -212,7 +212,7 @@ namespace Tetris
             {
                 if (item.top <= top)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = item.color;
                     Console.SetCursorPosition(item.left, item.top);
                     Console.WriteLine("■");
                 }
@@ -376,6 +376,7 @@ namespace Tetris
                         {
                             foreach (Coordinates item in body.coordinates)
                             {
+                                item.color = body.color;
                                 busyFields.Add(item);
                             }
                         }
@@ -394,6 +395,7 @@ namespace Tetris
                         {
                             foreach (Coordinates item in body.coordinates)
                             {
+                                item.color = body.color;
                                 busyFields.Add(item);
                             }
                         }
@@ -414,13 +416,11 @@ namespace Tetris
 
         private static Body RandomBody()
         {
-            int num = new Random().Next(1, 9);
+            int num = new Random().Next(1, 8);
             switch (num)
             {
                 case 1:
                     return new Square();
-                case 2:
-                    return new Rectangle();
                 case 3:
                     return new Line();
                 case 4:
@@ -431,7 +431,7 @@ namespace Tetris
                     return new T();
                 case 7:
                     return new Z();
-                case 8:
+                case 2:
                     return new Z_Opposite();
                 default:
                     throw new Exception();

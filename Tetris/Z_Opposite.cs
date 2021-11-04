@@ -30,6 +30,7 @@ namespace Tetris
                 
 
          };
+            color = ConsoleColor.DarkGray;
         }
 
         public override void Rotate()
