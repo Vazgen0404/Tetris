@@ -10,7 +10,6 @@ namespace Tetris
         {
             coordinates = new Coordinates[16]
             {
-                new Coordinates { left = 27, top = 10 },
                 new Coordinates { left = 28, top = 10 },
                 new Coordinates { left = 29, top = 10 },
                 new Coordinates { left = 30, top = 10 },
@@ -18,14 +17,15 @@ namespace Tetris
                 new Coordinates { left = 32, top = 10 },
                 new Coordinates { left = 33, top = 10 },
                 new Coordinates { left = 34, top = 10 },
-                new Coordinates { left = 27, top = 11 },
+                new Coordinates { left = 35, top = 10 },
                 new Coordinates { left = 28, top = 11 },
                 new Coordinates { left = 29, top = 11 },
                 new Coordinates { left = 30, top = 11 },
                 new Coordinates { left = 31, top = 11 },
                 new Coordinates { left = 32, top = 11 },
                 new Coordinates { left = 33, top = 11 },
-                new Coordinates { left = 34, top = 11 }
+                new Coordinates { left = 34, top = 11 },
+                new Coordinates { left = 35, top = 11 }
             };
             color = ConsoleColor.Blue;
         }

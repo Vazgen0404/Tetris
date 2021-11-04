@@ -15,7 +15,7 @@ namespace Tetris
 
         private static void Game()
         {
-            
+
             switch (ShowMenu())
             {
                 case "Start Game":
@@ -64,7 +64,7 @@ namespace Tetris
                 body.Print();
                 result.Show();
 
-                Thread.Sleep(500 / result.level);
+                Thread.Sleep(300 / result.level);
 
                 while (!IsTheEndOfTheMovement(body, busyFields, downRow, true))
                 {
@@ -73,13 +73,13 @@ namespace Tetris
                         switch (Console.ReadKey().Key)
                         {
                             case ConsoleKey.LeftArrow:
-                                if (!IsLeftBorder(body, leftRow) && !IsLeftFieldBusy(body,busyFields))
+                                if (!IsLeftBorder(body, leftRow) && !IsLeftFieldBusy(body, busyFields))
                                 {
                                     body.Move("Left");
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
-                                if (!IsRightBorder(body, rigtRow) && !IsRightFieldBusy(body,busyFields))
+                                if (!IsRightBorder(body, rigtRow) && !IsRightFieldBusy(body, busyFields))
                                 {
                                     body.Move("Right");
                                 }
@@ -102,19 +102,17 @@ namespace Tetris
                                     body.Move("Down");
                                     result.AddScore(2);
                                 }
-                                break;
+                                continue;
                             default:
                                 break;
                         }
                     }
-                    else
-                    { 
-                        body.Move("Down");
-                        Thread.Sleep(500);
-                    }
+                    body.Move("Down");
+
+                    Thread.Sleep(300 / result.level);
 
                 }
-                CheckLineClearance(allLines, busyFields,result);
+                CheckLineClearance(allLines, busyFields, result);
                 IsGameOver = CheckFinish(topRow, body);
 
             }
@@ -133,7 +131,7 @@ namespace Tetris
                 {
                     if ((item1 + "right") == item2)
                     {
-                        return true; 
+                        return true;
                     }
                 }
             }

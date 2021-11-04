@@ -50,13 +50,13 @@ namespace Tetris
                 case "Left":
                     foreach (Coordinates coordinate in coordinates)
                     {
-                        coordinate.left--;
+                        coordinate.left -= 2;
                     }
                     break;
                 case "Right":
                     foreach (Coordinates coordinate in coordinates)
                     {
-                        coordinate.left++;
+                        coordinate.left += 2;
                     }
                     break;
                 default:

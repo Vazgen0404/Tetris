@@ -40,9 +40,9 @@ namespace Tetris
                 case "down":
                     return new Coordinates { left = coordinates.left, top = coordinates.top + 1 };
                 case "left":
-                    return new Coordinates { left = coordinates.left - 1, top = coordinates.top };
+                    return new Coordinates { left = coordinates.left - 2, top = coordinates.top };
                 case "right":
-                    return new Coordinates { left = coordinates.left + 1, top = coordinates.top };
+                    return new Coordinates { left = coordinates.left + 2, top = coordinates.top };
                 default:
                     throw new Exception();
             }
