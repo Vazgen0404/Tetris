@@ -64,52 +64,59 @@ namespace Tetris
                 body.Print();
                 result.Show();
 
-                Thread.Sleep(300 / result.level);
-
+                Thread.Sleep(200 / result.level);
+                int speed = 1;
                 while (!IsTheEndOfTheMovement(body, busyFields, downRow, true))
                 {
-                    if (Console.KeyAvailable)
+                    if (speed % 100 == 0)
                     {
-                        switch (Console.ReadKey().Key)
+                        if (Console.KeyAvailable)
                         {
-                            case ConsoleKey.LeftArrow:
-                                if (!IsLeftBorder(body, leftRow) && !IsLeftFieldBusy(body, busyFields))
-                                {
-                                    body.Move("Left");
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (!IsRightBorder(body, rigtRow) && !IsRightFieldBusy(body, busyFields))
-                                {
-                                    body.Move("Right");
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                body.Move("Down");
-                                result.AddScore(1);
-                                break;
-                            case ConsoleKey.UpArrow:
-                                if (IsPossibleRotate(body, busyFields, leftRow, rigtRow))
-                                {
-                                    body.Clear();
-                                    body.Rotate();
-                                    body.Print();
-                                }
-                                break;
-                            case ConsoleKey.Spacebar:
-                                while (!IsTheEndOfTheMovement(body, busyFields, downRow, false))
-                                {
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.LeftArrow:
+                                    if (!IsLeftBorder(body, leftRow) && !IsLeftFieldBusy(body, busyFields))
+                                    {
+                                        body.Move("Left");
+                                    }
+                                    break;
+                                case ConsoleKey.RightArrow:
+                                    if (!IsRightBorder(body, rigtRow) && !IsRightFieldBusy(body, busyFields))
+                                    {
+                                        body.Move("Right");
+                                    }
+                                    break;
+                                case ConsoleKey.DownArrow:
                                     body.Move("Down");
-                                    result.AddScore(2);
-                                }
-                                continue;
-                            default:
-                                break;
+                                    result.AddScore(1);
+                                    break;
+                                case ConsoleKey.UpArrow:
+                                    if (IsPossibleRotate(body, busyFields, leftRow, rigtRow,downRow))
+                                    {
+                                        body.Clear();
+                                        body.Rotate();
+                                        body.Print();
+                                    }
+                                    break;
+                                case ConsoleKey.Spacebar:
+                                    while (!IsTheEndOfTheMovement(body, busyFields, downRow, false))
+                                    {
+                                        body.Move("Down");
+                                        result.AddScore(2);
+                                    }
+                                    continue;
+                                default:
+                                    break;
+                            }
                         }
+                        if (!IsTheEndOfTheMovement(body, busyFields, downRow, false))
+                        {
+                            body.Move("Down");
+                        }
+                      
+                        Thread.Sleep(200 / result.level);
                     }
-                    body.Move("Down");
-
-                    Thread.Sleep(300 / result.level);
+                    speed++;
 
                 }
                 CheckLineClearance(allLines, busyFields, result);
@@ -253,7 +260,7 @@ namespace Tetris
             }
         }
 
-        private static bool IsPossibleRotate(Body body, List<Coordinates> busyFields, List<Coordinates> leftRow, List<Coordinates> rigtRow)
+        private static bool IsPossibleRotate(Body body, List<Coordinates> busyFields, List<Coordinates> leftRow, List<Coordinates> rigtRow, List<Coordinates> downRow)
         {
             Body temp = body.Clone();
             temp.Rotate();
@@ -282,6 +289,16 @@ namespace Tetris
             foreach (Coordinates item1 in temp.coordinates)
             {
                 foreach (Coordinates item2 in rigtRow)
+                {
+                    if (item1 == item2)
+                    {
+                        return false;
+                    }
+                }
+            }
+            foreach (Coordinates item1 in temp.coordinates)
+            {
+                foreach (Coordinates item2 in downRow)
                 {
                     if (item1 == item2)
                     {

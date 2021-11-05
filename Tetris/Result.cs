@@ -104,11 +104,11 @@ namespace Tetris
             Console.SetCursorPosition(24,10);
             Console.WriteLine("Best Results");
 
-            if (File.Exists(@"D:\Results.txt"))
+            if (File.Exists(@"..\..\..\..\Results.txt"))
             {
                 Console.SetCursorPosition(14, 13);
                 Console.WriteLine("Score    Level    Lines    Time");
-                List<Result> results = ReadFromFile(@"D:\Results.txt");
+                List<Result> results = ReadFromFile(@"..\..\..\..\Results.txt");
                 for (int i = 0; i < results.Count; i++)
                 {
                     Console.SetCursorPosition(12, 14 + i);
@@ -146,9 +146,9 @@ namespace Tetris
         public static void Save(Result result)
         {
             List<Result> results;
-            if (File.Exists(@"D:\Results.txt"))
+            if (File.Exists(@"..\..\..\..\Results.txt"))
             {
-                results = ReadFromFile(@"D:\Results.txt");
+                results = ReadFromFile(@"..\..\..\..\Results.txt");
             }
             else
             {
@@ -161,12 +161,12 @@ namespace Tetris
             {
                 results.RemoveAt(10);
             }
-            WriteInFile(results, @"D:\Results.txt");
+            WriteInFile(results, @"..\..\..\..\Results.txt");
         }
 
         private static void WriteInFile(List<Result> results, string path)
         {
-            using (FileStream fs = new FileStream(@"D:\Results.txt", FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 fs.SetLength(fs.Position);
                 DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<Result>));
