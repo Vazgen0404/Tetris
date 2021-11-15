@@ -559,7 +559,7 @@ namespace Tetris
 
         private static bool IsHighScore(Result result)
         {
-            List<Result> results = Result.ReadFromFile(@"D:\Results.txt");
+            List<Result> results = Result.ReadFromFile(@".\Results.txt");
 
             if (result.score == results[0].score)
             {
